@@ -123,6 +123,7 @@
 
   .profile__description {
     font-size: 14px;
+    max-width: 282px;
   }
   .profile__edit-button {
     width: 18px;
