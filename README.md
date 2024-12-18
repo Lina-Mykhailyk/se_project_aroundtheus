@@ -15,4 +15,4 @@ This is the third project of the Software Engineering program at TripleTen. It w
 
 ## Visuals
 
-/video to be added after the first review/
+[The link for the detailed video about the project](https://drive.google.com/file/d/10-3BRHKlZTfx52j4V4X0kXwV7bXGAwjB/view?usp=sharing)
