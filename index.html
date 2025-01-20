@@ -56,7 +56,9 @@
         <p class="footer__copyright">&#169; 2024 Around The U.S.</p>
       </footer>
     </div>
-    <div class="modal">
+
+    <!-- Edit profile modal-->
+    <div class="modal" id="edit-profile-modal">
       <div class="modal__container">
         <button
           type="button"
@@ -68,8 +70,8 @@
           <input
             class="modal__input"
             type="text"
-            name="title"
-            id="modal-title-input"
+            name="name"
+            id="modal-name-input"
             placeholder="Name"
           />
           <input
@@ -85,6 +87,37 @@
             aria-label="Save profile changes"
           >
             Save
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add card modal-->
+    <div class="modal" id="add-card-modal">
+      <div class="modal__container">
+        <button
+          type="button"
+          class="modal__close-button"
+          aria-label="Close the add card window"
+        ></button>
+        <p class="modal__heading">New Place</p>
+        <form class="modal__form">
+          <input
+            class="modal__input"
+            type="text"
+            name="title"
+            id="modal-title-input"
+            placeholder="Title"
+          />
+          <input
+            class="modal__input"
+            type="text"
+            name="link"
+            id="modal-link-input"
+            placeholder="Image link"
+          />
+          <button type="submit" class="modal__save" aria-label="Add new card">
+            Create
           </button>
         </form>
       </div>
