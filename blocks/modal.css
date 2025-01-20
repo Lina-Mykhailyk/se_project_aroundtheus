@@ -41,7 +41,7 @@
 }
 
 .modal__preview-image {
-  object-fit: cover;
+  object-fit: contain;
   max-width: 100%;
 }
 
@@ -127,10 +127,16 @@
     width: 282px;
   }
 
-  .modal__close {
+  .modal__close-button {
     width: 26px;
     height: 26px;
     right: 0px;
+  }
+
+  .modal__close-button_preview {
+    position: absolute;
+    right: -5px;
+    top: -5px;
   }
 
   .modal__heading {
