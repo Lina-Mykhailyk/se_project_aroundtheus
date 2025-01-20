@@ -26,7 +26,6 @@ const initialCards = [
 ];
 
 // Variables edit
-
 const profileEditButton = document.querySelector(".profile__edit-button");
 const profileEditModal = document.querySelector("#edit-profile-modal");
 const profileModalCloseButton = profileEditModal.querySelector(
@@ -37,6 +36,14 @@ const profileModalCloseButton = profileEditModal.querySelector(
 const addCardButton = document.querySelector(".profile__add-button");
 const addCardModal = document.querySelector("#add-card-modal");
 const addCardModalCloseButton = addCardModal.querySelector(
+  ".modal__close-button"
+);
+
+// Variables preview
+const previewImageModal = document.querySelector("#preview-image-modal");
+const previewImage = document.querySelector(".modal__preview-image");
+const previewCaption = document.querySelector(".modal__preview-caption");
+const previewImageModalCloseButton = previewImageModal.querySelector(
   ".modal__close-button"
 );
 
@@ -79,7 +86,12 @@ function getCardElement(cardData) {
   cardDeleteButton.addEventListener("click", () => {
     cardElement.remove();
   });
-
+  cardImageElement.addEventListener("click", () => {
+    previewImage.src = cardData.link;
+    previewImage.alt = cardData.name;
+    previewCaption.textContent = cardData.name;
+    openPopup(previewImageModal);
+  });
   cardImageElement.src = cardData.link;
   cardImageElement.alt = cardData.name;
   cardTitleElement.textContent = cardData.name;
@@ -126,6 +138,10 @@ addCardButton.addEventListener("click", () => openPopup(addCardModal));
 
 addCardModalCloseButton.addEventListener("click", () =>
   closePopup(addCardModal)
+);
+
+previewImageModalCloseButton.addEventListener("click", () =>
+  closePopup(previewImageModal)
 );
 
 initialCards.forEach((cardData) => renderCard(cardData, cardListElement));

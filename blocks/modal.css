@@ -6,11 +6,18 @@
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
-  display: none;
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+  pointer-events: none;
 }
 
 .modal_opened {
-  display: flex;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s, opacity 0.5s linear;
+  pointer-events: all;
 }
 
 .modal__container {
@@ -22,6 +29,31 @@
   border-radius: 10px;
   width: 430px;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
+}
+.modal__container_preview {
+  background: transparent;
+  display: flex;
+  padding: 0;
+  max-height: 75vh;
+  max-width: 75vw;
+  width: auto;
+  height: auto;
+}
+
+.modal__preview-image {
+  object-fit: cover;
+  max-width: 100%;
+}
+
+.modal__preview-caption {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #fff;
+  margin: 0;
 }
 
 .modal__close-button {
