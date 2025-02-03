@@ -68,10 +68,28 @@ const cardTemplate =
 
 function closePopup(modal) {
   modal.classList.remove("modal_opened");
+  document.removeEventListener("keydown", closeModalEsc);
+  modal.removeEventListener("mousedown", closeModalOverlay);
 }
 
 function openPopup(modal) {
   modal.classList.add("modal_opened");
+  document.addEventListener("keydown", closeModalEsc);
+  modal.addEventListener("mousedown", closeModalOverlay);
+}
+
+function closeModalEsc(evt) {
+  if (evt.key === "Escape") {
+    evt.preventDefault();
+    const modalOpened = document.querySelector(".modal_opened");
+    closePopup(modalOpened);
+  }
+}
+
+function closeModalOverlay(evt) {
+  if (evt.target.classList.contains("modal")) {
+    closePopup(evt.target);
+  }
 }
 
 function getCardElement(cardData) {
