@@ -1,4 +1,5 @@
 import FormValidator from "../components/FormValidator.js";
+import Card from "../components/Card.js";
 
 const initialCards = [
   {
@@ -37,8 +38,10 @@ const addCardModal = document.querySelector("#add-card-modal");
 
 // Variables preview
 const previewImageModal = document.querySelector("#preview-image-modal");
-const previewImage = document.querySelector(".modal__preview-image");
-const previewCaption = document.querySelector(".modal__preview-caption");
+const previewImage = previewImageModal.querySelector(".modal__preview-image");
+const previewCaption = previewImageModal.querySelector(
+  ".modal__preview-caption"
+);
 
 // Variables form
 const profileNameInput = document.querySelector("#modal-name-input");
@@ -50,15 +53,7 @@ const cardLinkInput = document.querySelector("#modal-link-input");
 const profileEditForm = document.forms["edit-profile-form"];
 const addCardForm = document.forms["add-card-form"];
 
-// Other variables
-const profileName = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-const cardListElement = document.querySelector(".cards__list");
-const cardTemplate =
-  document.querySelector("#card-template").content.firstElementChild;
-const closeButtons = document.querySelectorAll(".modal__close-button");
-
-//Validation
+// Validation variables
 const validationOptions = {
   inputSelector: ".modal__input",
   submitButtonSelector: ".modal__save",
@@ -69,6 +64,13 @@ const validationOptions = {
 
 const editFormValidator = new FormValidator(validationOptions, profileEditForm);
 const addFormValidator = new FormValidator(validationOptions, addCardForm);
+
+// Other variables
+const profileName = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+const cardListElement = document.querySelector(".cards__list");
+const closeButtons = document.querySelectorAll(".modal__close-button");
+const cardSelector = "#card-template";
 
 // Functions
 
@@ -98,33 +100,16 @@ function closeModalOverlay(evt) {
   }
 }
 
-function getCardElement(cardData) {
-  const cardElement = cardTemplate.cloneNode(true);
-  const cardImageElement = cardElement.querySelector(".card__image");
-  const cardTitleElement = cardElement.querySelector(".card__title");
-  const cardLikeButton = cardElement.querySelector(".card__like-button");
-  const cardDeleteButton = cardElement.querySelector(".card__delete-button");
-  cardLikeButton.addEventListener("click", () => {
-    cardLikeButton.classList.toggle("card__like-button_active");
-  });
-  cardDeleteButton.addEventListener("click", () => {
-    cardElement.remove();
-  });
-  cardImageElement.addEventListener("click", () => {
-    previewImage.src = cardData.link;
-    previewImage.alt = cardData.name;
-    previewCaption.textContent = cardData.name;
-    openPopup(previewImageModal);
-  });
-  cardImageElement.src = cardData.link;
-  cardImageElement.alt = cardData.name;
-  cardTitleElement.textContent = cardData.name;
-  return cardElement;
+function handleImageClick(cardData) {
+  previewImage.src = cardData.link;
+  previewImage.alt = cardData.name;
+  previewCaption.textContent = cardData.name;
+  openPopup(previewImageModal);
 }
 
 function renderCard(cardData, wrapper) {
-  const cardElement = getCardElement(cardData);
-  wrapper.prepend(cardElement);
+  const cardElement = new Card(cardData, cardSelector, handleImageClick);
+  wrapper.prepend(cardElement.getView());
 }
 
 function handleProfileEditSubmit(evt) {
