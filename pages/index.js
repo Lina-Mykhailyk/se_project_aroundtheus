@@ -1,3 +1,5 @@
+import FormValidator from "../components/FormValidator.js";
+
 const initialCards = [
   {
     name: "Yosemite Valley",
@@ -28,24 +30,15 @@ const initialCards = [
 // Variables edit
 const profileEditButton = document.querySelector(".profile__edit-button");
 const profileEditModal = document.querySelector("#edit-profile-modal");
-const profileModalCloseButton = profileEditModal.querySelector(
-  ".modal__close-button"
-);
 
 // Variables add
 const addCardButton = document.querySelector(".profile__add-button");
 const addCardModal = document.querySelector("#add-card-modal");
-const addCardModalCloseButton = addCardModal.querySelector(
-  ".modal__close-button"
-);
 
 // Variables preview
 const previewImageModal = document.querySelector("#preview-image-modal");
 const previewImage = document.querySelector(".modal__preview-image");
 const previewCaption = document.querySelector(".modal__preview-caption");
-const previewImageModalCloseButton = previewImageModal.querySelector(
-  ".modal__close-button"
-);
 
 // Variables form
 const profileNameInput = document.querySelector("#modal-name-input");
@@ -64,6 +57,18 @@ const cardListElement = document.querySelector(".cards__list");
 const cardTemplate =
   document.querySelector("#card-template").content.firstElementChild;
 const closeButtons = document.querySelectorAll(".modal__close-button");
+
+//Validation
+const validationOptions = {
+  inputSelector: ".modal__input",
+  submitButtonSelector: ".modal__save",
+  inactiveButtonClass: "modal__save_disabled",
+  inputErrorClass: "modal__input_type_error",
+  errorClass: "modal__error_visible",
+};
+
+const editFormValidator = new FormValidator(validationOptions, profileEditForm);
+const addFormValidator = new FormValidator(validationOptions, addCardForm);
 
 // Functions
 
@@ -158,3 +163,6 @@ addCardForm.addEventListener("submit", handleAddCardSubmit);
 addCardButton.addEventListener("click", () => openPopup(addCardModal));
 
 initialCards.forEach((cardData) => renderCard(cardData, cardListElement));
+
+editFormValidator.enableValidation();
+addFormValidator.enableValidation();
