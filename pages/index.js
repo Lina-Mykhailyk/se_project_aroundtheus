@@ -133,6 +133,7 @@ function handleAddCardSubmit(evt) {
 profileEditForm.addEventListener("submit", handleProfileEditSubmit);
 
 profileEditButton.addEventListener("click", () => {
+  resetValidation();
   profileNameInput.value = profileName.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
   openPopup(profileEditModal);
