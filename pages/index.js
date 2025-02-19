@@ -130,6 +130,7 @@ function handleAddCardSubmit(evt) {
   const link = cardLinkInput.value;
   renderCard({ name, link }, cardListElement);
   evt.target.reset();
+  addFormValidator.resetValidation();
   closePopup(addCardModal);
 }
 
