@@ -107,9 +107,14 @@ function handleImageClick(cardData) {
   openPopup(previewImageModal);
 }
 
-function renderCard(cardData, wrapper) {
+function createCard(cardData) {
   const cardElement = new Card(cardData, cardSelector, handleImageClick);
-  wrapper.prepend(cardElement.getView());
+  return cardElement.getView();
+}
+
+function renderCard(cardData, wrapper) {
+  const cardElement = createCard(cardData);
+  wrapper.prepend(cardElement);
 }
 
 function handleProfileEditSubmit(evt) {
@@ -133,9 +138,9 @@ function handleAddCardSubmit(evt) {
 profileEditForm.addEventListener("submit", handleProfileEditSubmit);
 
 profileEditButton.addEventListener("click", () => {
-  resetValidation();
   profileNameInput.value = profileName.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
+  editFormValidator.resetValidation();
   openPopup(profileEditModal);
 });
 
