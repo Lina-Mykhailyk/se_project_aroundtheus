@@ -33,14 +33,7 @@ export const validationOptions = {
   errorClass: "modal__error_visible",
 };
 
-export const profileConfig = {
+export const buttons = {
   editProfileButton: document.querySelector(".profile__edit-button"),
   addCardButton: document.querySelector(".profile__add-button"),
-  profileNameInput: document.querySelector("#modal-name-input"),
-  profileDescriptionInput: document.querySelector("#modal-description-input"),
-};
-
-export const formConfig = {
-  editProfileForm: document.forms["edit-profile-form"],
-  addCardForm: document.forms["add-card-form"],
 };

@@ -1,8 +1,7 @@
 import {
   initialCards,
   validationOptions,
-  profileConfig,
-  formConfig,
+  buttons,
 } from "../utils/constants.js";
 import FormValidator from "../components/FormValidator.js";
 import Card from "../components/Card.js";
@@ -12,6 +11,13 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import Section from "../components/Section.js";
 import UserInfo from "../components/UserInfo.js";
 import "./index.css";
+
+function createCard(cardData) {
+  const card = new Card(cardData, "#card-template", (cardData) => {
+    previewImagePopup.open({ link: cardData.link, name: cardData.name });
+  });
+  return card.getView();
+}
 
 // Instances
 
@@ -25,10 +31,9 @@ const editProfilePopup = new PopupWithForm({
 const addCardPopup = new PopupWithForm({
   popupSelector: "#add-card-modal",
   handleFormSubmit: (cardData) => {
-    const card = new Card(cardData, "#card-template", (cardData) => {
-      previewImagePopup.open({ link: cardData.link, name: cardData.name });
-    });
-    cardList.addItem(card.getView());
+    const cardElement = createCard(cardData);
+    cardList.addItem(cardElement);
+    addCardPopup.resetForm();
   },
 });
 
@@ -43,10 +48,7 @@ const cardList = new Section(
   {
     items: initialCards,
     renderer: (cardData) => {
-      const card = new Card(cardData, "#card-template", (cardData) => {
-        previewImagePopup.open({ link: cardData.link, name: cardData.name });
-      });
-      const cardElement = card.getView();
+      const cardElement = createCard(cardData);
       cardList.addItem(cardElement);
     },
   },
@@ -61,11 +63,11 @@ cardList.renderItems(initialCards);
 
 const editFormValidator = new FormValidator(
   validationOptions,
-  formConfig.editProfileForm
+  editProfilePopup.getForm()
 );
 const addFormValidator = new FormValidator(
   validationOptions,
-  formConfig.addCardForm
+  addCardPopup.getForm()
 );
 
 editFormValidator.enableValidation();
@@ -73,15 +75,14 @@ addFormValidator.enableValidation();
 
 // Event listeners
 
-profileConfig.editProfileButton.addEventListener("click", () => {
+buttons.editProfileButton.addEventListener("click", () => {
   const { userName, userDescription } = userInfo.getUserInfo();
-  profileConfig.profileNameInput.value = userName;
-  profileConfig.profileDescriptionInput.value = userDescription;
+  editProfilePopup.setInputValues({ userName, userDescription });
   editFormValidator.resetValidation();
   editProfilePopup.open();
 });
 
-profileConfig.addCardButton.addEventListener("click", () => {
+buttons.addCardButton.addEventListener("click", () => {
   addFormValidator.resetValidation();
   addCardPopup.open();
 });
