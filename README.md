@@ -1,6 +1,6 @@
 # Around The U.S.
 
-This is the third project of the Software Engineering program at TripleTen. It was created using HTML and CSS, based on a Figma design. Various responsive design techniques, including media queries, were used so all the elements are displayed correctly on popular screen sizes.
+This is the project of the Software Engineering program at TripleTen. It was created using HTML, CSS and JS, based on a Figma design.
 
 [The link to GitHub pages](https://lina-mykhailyk.github.io/se_project_aroundtheus/)
 

@@ -14,22 +14,20 @@
       name="keywords"
       content="HTML, CSS, Git, GitHub, fonts, BEM, Grid, Figma"
     />
-    <link rel="stylesheet" href="./pages/index.css" />
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
   </head>
   <body class="page">
     <div class="page__content">
       <header class="header page__section">
         <img
           class="header__logo"
-          src="./images/logo.svg"
+          src="<%=require('./images/logo.svg')%>"
           alt="Around The U.S. Logo"
         />
       </header>
       <main>
         <section class="profile page__section">
           <img
-            src="./images/avatar.png"
+            src="<%=require('./images/avatar.png')%>"
             alt="Jacques Cousteau avatar"
             class="profile__avatar"
           />
@@ -174,6 +172,5 @@
         </div>
       </li>
     </template>
-    <script defer src="./pages/index.js" type="module"></script>
   </body>
 </html>
