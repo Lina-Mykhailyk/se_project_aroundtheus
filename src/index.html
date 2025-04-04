@@ -26,19 +26,27 @@
       </header>
       <main>
         <section class="profile page__section">
-          <img
-            src="<%=require('./images/avatar.png')%>"
-            alt="Jacques Cousteau avatar"
-            class="profile__avatar"
-          />
+          <div class="profile__avatar-container">
+            <img
+              src="<%=require('./images/avatar.png')%>"
+              alt="Avatar"
+              class="profile__avatar"
+              id="profile-avatar"
+            />
+            <button
+              class="profile__avatar-edit-button"
+              type="button"
+              aria-label="Edit Avatar"
+            ></button>
+          </div>
           <div class="profile__info">
-            <h1 class="profile__title">Jacques Cousteau</h1>
+            <h1 class="profile__title"></h1>
             <button
               class="profile__edit-button"
               type="button"
               aria-label="Edit your profile"
             ></button>
-            <p class="profile__description">Explorer</p>
+            <p class="profile__description"></p>
           </div>
           <button
             class="profile__add-button"
@@ -51,7 +59,7 @@
         </section>
       </main>
       <footer class="footer page__section">
-        <p class="footer__copyright">&#169; 2024 Around The U.S.</p>
+        <p class="footer__copyright">&#169; 2025 Around The U.S.</p>
       </footer>
     </div>
 
@@ -91,6 +99,36 @@
             type="submit"
             class="modal__save"
             aria-label="Save profile changes"
+          >
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Updating avatar modal -->
+    <div class="modal" id="update-avatar-modal">
+      <div class="modal__container">
+        <button
+          type="button"
+          class="modal__close-button"
+          aria-label="Close the edit window"
+        ></button>
+        <p class="modal__heading">Change profile picture</p>
+        <form id="update-avatar-form" class="modal__form">
+          <input
+            class="modal__input"
+            type="url"
+            name="link"
+            id="modal-avatar-link-input"
+            placeholder="Avatar link"
+            required
+          />
+          <span class="modal__error" id="modal-avatar-link-input-error"></span>
+          <button
+            type="submit"
+            class="modal__save"
+            aria-label="Save avatar changes"
           >
             Save
           </button>
@@ -150,6 +188,25 @@
         ></button>
         <img src="" alt="" class="modal__preview-image" />
         <p class="modal__preview-caption"></p>
+      </div>
+    </div>
+
+    <!-- Delete card modal -->
+    <div class="modal" id="delete-card-modal">
+      <div class="modal__container">
+        <button
+          type="button"
+          class="modal__close-button"
+          aria-label="Close the delete card confirmation"
+        ></button>
+        <p class="modal__heading">Are you sure?</p>
+        <button
+          type="submit"
+          class="modal__save modal__save_delete"
+          aria-label="Delete card"
+        >
+          Yes
+        </button>
       </div>
     </div>
 
