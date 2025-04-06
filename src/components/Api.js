@@ -4,6 +4,17 @@ export default class Api {
     this._headers = headers;
   }
 
+  _request(endpoint, options = {}) {
+    const finalOptions = {
+      headers: this._headers,
+      ...options,
+    };
+    const url = `${this._baseUrl}${endpoint}`;
+    return fetch(url, finalOptions)
+      .then(this._handleResponse)
+      .catch(this._handleError);
+  }
+
   _handleResponse(res) {
     if (res.ok) {
       return res.json();
@@ -17,81 +28,53 @@ export default class Api {
   }
 
   getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, { headers: this._headers })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+    return this._request("/cards");
   }
 
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, { headers: this._headers })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+    return this._request("/users/me");
   }
 
   updateUserProfile(userName, userDescription) {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return this._request("/users/me", {
       method: "PATCH",
-      headers: {
-        ...this._headers,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({ name: userName, about: userDescription }),
-    })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+      "Content-Type": "application/json",
+    });
   }
 
   updateUserAvatar(avatarLink) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
+    return this._request("/users/me/avatar", {
       method: "PATCH",
-      headers: {
-        ...this._headers,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({ avatar: avatarLink }),
-    })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+      "Content-Type": "application/json",
+    });
   }
 
   addNewCard({ name, link }) {
-    return fetch(`${this._baseUrl}/cards`, {
+    return this._request("/cards", {
       method: "POST",
-      headers: {
-        ...this._headers,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({ name, link }),
-    })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+      "Content-Type": "application/json",
+    });
   }
 
   likeCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    return this._request(`/cards/${cardId}/likes`, {
       method: "PUT",
-      headers: this._headers,
-    })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+    });
   }
 
   dislikeCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    return this._request(`/cards/${cardId}/likes`, {
       method: "DELETE",
-      headers: this._headers,
-    })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+    });
   }
 
   deleteCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+    return this._request(`/cards/${cardId}`, {
       method: "DELETE",
-      headers: this._headers,
-    })
-      .then(this._handleResponse)
-      .catch(this._handleError);
+    });
   }
 
   loadUserInfoAndCards() {

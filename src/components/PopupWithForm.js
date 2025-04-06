@@ -37,8 +37,19 @@ export default class PopupWithForm extends Popup {
     this._popupForm.addEventListener("submit", (evt) => {
       evt.preventDefault();
       this._inputValues = this._getInputValues();
-      this._handleFormSubmit(this._inputValues);
-      this.close();
+
+      this.setLoading(true);
+
+      this._handleFormSubmit(this._inputValues)
+        .then(() => {
+          this.close();
+        })
+        .catch((err) => {
+          console.error("Error submitting form:", err);
+        })
+        .finally(() => {
+          this.setLoading(false);
+        });
     });
   }
 
@@ -50,10 +61,6 @@ export default class PopupWithForm extends Popup {
       this._submitButton.textContent = this._submitButtonContent;
       this._submitButton.disabled = false;
     }
-  }
-
-  close() {
-    super.close();
   }
 
   resetForm() {
