@@ -10,72 +10,102 @@ import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
 import "./index.css";
 
-// Universal function for handling form submissions
+// Api instance
 
-function handleSubmit(request, popupInstance, loadingText = "Saving...") {
-  popupInstance.renderLoading(true, loadingText);
-
-  request()
-    .then(() => {
-      popupInstance.close();
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-    .finally(() => {
-      popupInstance.renderLoading(false);
-    });
-}
+const api = new Api({
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
+  headers: {
+    authorization: "3fd446db-e54d-438e-b742-4b3d652cdb08",
+    "Content-Type": "application/json",
+  },
+});
 
 // Popups
 
 const editProfilePopup = new PopupWithForm({
   popupSelector: "#edit-profile-modal",
   handleFormSubmit: (data) => {
-    const makeRequest = () =>
-      api
-        .updateUserProfile(data.userName, data.userDescription)
-        .then((updatedData) => {
-          userInfo.setUserInfo({
-            userName: updatedData.name,
-            userDescription: updatedData.about,
-          });
-        });
+    editProfilePopup.setLoading(true, "Saving...");
 
-    handleSubmit(makeRequest, editProfilePopup);
+    api
+      .updateUserProfile(data.userName, data.userDescription)
+      .then((updatedData) => {
+        userInfo.setUserInfo({
+          userName: updatedData.name,
+          userDescription: updatedData.about,
+        });
+        editProfilePopup.close();
+      })
+      .catch((err) => console.error("Error updating user profile:", err))
+      .finally(() => {
+        editProfilePopup.setLoading(false);
+      });
   },
 });
 
 const updateAvatarPopup = new PopupWithForm({
   popupSelector: "#update-avatar-modal",
   handleFormSubmit: (data) => {
-    const makeRequest = () =>
-      api.updateUserAvatar(data.link).then((updatedData) => {
+    const avatarLink = data.link;
+    updateAvatarPopup.setLoading(true, "Saving...");
+
+    api
+      .updateUserAvatar(avatarLink)
+      .then((updatedData) => {
         userInfo.setUserInfo({
           avatar: updatedData.avatar,
         });
+        updateAvatarPopup.close();
+      })
+      .catch((err) => console.error("Error updating profile picture:", err))
+      .finally(() => {
+        updateAvatarPopup.setLoading(false);
       });
-
-    handleSubmit(makeRequest, updateAvatarPopup);
   },
 });
 
 const addCardPopup = new PopupWithForm({
   popupSelector: "#add-card-modal",
-  handleFormSubmit: (cardData) => {
-    const makeRequest = () =>
-      api.addNewCard(cardData).then((newCardData) => {
+  handleFormSubmit: (data) => {
+    addCardPopup.setLoading(true, "Saving...");
+
+    api
+      .addNewCard(data)
+      .then((newCardData) => {
         const newCardElement = createCard(newCardData);
         cardList.addItem(newCardElement, true);
+        addCardPopup.close();
+        addCardPopup.resetForm();
+      })
+      .catch((err) => console.error("Error adding new card:", err))
+      .finally(() => {
+        addCardPopup.setLoading(false);
       });
-
-    handleSubmit(makeRequest, addCardPopup);
   },
 });
 
 const previewImagePopup = new PopupWithImage("#preview-image-modal");
 
-const deleteCardPopup = new PopupWithConfirmation("#delete-card-modal");
+const deleteCardPopup = new PopupWithConfirmation({
+  popupSelector: "#delete-card-modal",
+  handleConfirm: (cardId) => {
+    api
+      .deleteCard(cardId)
+      .then(() => {
+        const cardElement = document.querySelector(
+          `.card[data-id="${cardId}"]`
+        );
+        if (cardElement) {
+          cardElement.remove();
+        }
+
+        deleteCardPopup.close();
+      })
+      .catch((err) => {
+        console.error("Error deleting card:", err);
+      });
+  },
+});
 
 // Card instance
 
@@ -87,47 +117,27 @@ function createCard(cardData) {
       previewImagePopup.open({ link: cardData.link, name: cardData.name });
     },
     (cardId) => {
-      deleteCardPopup.open(() => {
-        const makeRequest = () =>
-          api.deleteCard(cardId).then(() => {
-            const cardElement = document.querySelector(
-              `.card[data-id="${cardId}"]`
-            );
-            cardElement.remove();
-          });
-
-        handleSubmit(makeRequest, deleteCardPopup, "Deleting...");
-      });
+      deleteCardPopup.open(cardId);
     },
     (cardId) => {
-      const makeRequest = () =>
-        api.likeCard(cardId).then((updatedCardData) => {
+      api
+        .likeCard(cardId)
+        .then((updatedCardData) => {
           card.updateLikeButton(updatedCardData.isLiked);
-        });
-
-      handleSubmit(makeRequest, card);
+        })
+        .catch((err) => console.error("Error liking card:", err));
     },
     (cardId) => {
-      const makeRequest = () =>
-        api.dislikeCard(cardId).then((updatedCardData) => {
+      api
+        .dislikeCard(cardId)
+        .then((updatedCardData) => {
           card.updateLikeButton(updatedCardData.isLiked);
-        });
-
-      handleSubmit(makeRequest, card);
+        })
+        .catch((err) => console.error("Error disliking card:", err));
     }
   );
   return card.getView();
 }
-
-// Api instance
-
-const api = new Api({
-  baseUrl: "https://around-api.en.tripleten-services.com/v1",
-  headers: {
-    authorization: "3fd446db-e54d-438e-b742-4b3d652cdb08",
-    "Content-Type": "application/json",
-  },
-});
 
 // User Info
 
@@ -174,18 +184,19 @@ api
 
 const formValidators = {};
 
-const enableValidation = (config) => {
-  const formList = Array.from(document.querySelectorAll(config.formSelector));
+const enableValidation = () => {
+  const formList = Array.from(
+    document.querySelectorAll(validationOptions.formSelector)
+  );
   formList.forEach((formElement) => {
-    const validator = new FormValidator(config, formElement);
+    const validator = new FormValidator(validationOptions, formElement);
     const formName = formElement.getAttribute("name");
-
     formValidators[formName] = validator;
     validator.enableValidation();
   });
 };
 
-enableValidation(validationOptions);
+enableValidation();
 
 // Event listeners
 

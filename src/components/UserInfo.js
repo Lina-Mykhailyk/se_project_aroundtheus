@@ -28,9 +28,9 @@ export default class UserInfo {
     }
     if (avatar) {
       this._userAvatarElement.src = avatar;
+      this._userAvatarElement.onload = () => {
+        this._userAvatarElement.classList.add("loaded");
+      };
     }
-    this._userAvatarElement.onload = () => {
-      this._userAvatarElement.classList.add("loaded");
-    };
   }
 }
