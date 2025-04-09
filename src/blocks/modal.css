@@ -107,7 +107,7 @@
 
 .modal__error {
   min-height: 30px;
-  margin: 5px 0 13px;
+  margin: 5px 0 0;
   display: block;
 }
 
@@ -144,6 +144,10 @@
   color: #000;
 }
 
+.modal__save_delete {
+  width: 100%;
+  margin-top: 36px;
+}
 @media screen and (max-width: 620px) {
   .modal__container {
     padding: 25px 22px;
